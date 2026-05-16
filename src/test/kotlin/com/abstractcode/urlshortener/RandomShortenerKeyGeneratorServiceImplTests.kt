@@ -1,11 +1,8 @@
 package com.abstractcode.urlshortener
 
-import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.Assertions.assertNotEquals
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import kotlin.test.DefaultAsserter.assertEquals
-import kotlin.test.assertNotSame
 
 class RandomShortenerKeyGeneratorServiceImplTests {
     @Test
@@ -38,6 +35,6 @@ class RandomShortenerKeyGeneratorServiceImplTests {
         val firstKey = generator.generate()
         val secondKey = generator.generate()
 
-        assertNotEquals( firstKey, secondKey, "Generated keys should not be the same")
+        assertNotEquals(firstKey, secondKey, "Generated keys should not be the same")
     }
 }
