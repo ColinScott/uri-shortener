@@ -2,12 +2,16 @@ package com.abstractcode.urishortener.uristore
 
 import com.abstractcode.urishortener.ShortenerKey
 import jakarta.persistence.Entity
+import jakarta.persistence.EntityExistsException
+import jakarta.persistence.EntityManager
 import jakarta.persistence.Id
+import jakarta.persistence.PersistenceContext
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 import java.net.URI
 import kotlin.jvm.optionals.getOrNull
+
 
 @Entity
 class ShortenedUri(
@@ -18,7 +22,25 @@ class ShortenedUri(
     override fun toString(): String = "$id:$uri"
 }
 
-interface ShortenedUriRepository : CrudRepository<ShortenedUri, String> {}
+interface ShortenedUriPersistRepository {
+    fun persist(shortenedUri: ShortenedUri): StoreResult
+}
+
+class ShortenedUriPersistRepositoryImpl(
+    @PersistenceContext
+    private val entityManager: EntityManager
+) : ShortenedUriPersistRepository {
+    override fun persist(shortenedUri: ShortenedUri): StoreResult {
+        try {
+            entityManager.persist(shortenedUri)
+            return StoreResult.Success
+        } catch (_: EntityExistsException) {
+            return StoreResult.KeyAlreadyExists
+        }
+    }
+}
+
+interface ShortenedUriRepository : CrudRepository<ShortenedUri, String>, ShortenedUriPersistRepository
 
 @Repository
 class JpaUriStore(val repository: ShortenedUriRepository) : UriStore {
@@ -33,11 +55,6 @@ class JpaUriStore(val repository: ShortenedUriRepository) : UriStore {
     ): StoreResult {
         val shortenedUri = ShortenedUri(key.key, uri)
 
-        return if (repository.existsById(key.key)) {
-            StoreResult.KeyAlreadyExists
-        } else {
-            repository.save(shortenedUri)
-            StoreResult.Success
-        }
+        return repository.persist(shortenedUri)
     }
 }
