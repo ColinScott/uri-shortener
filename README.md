@@ -102,3 +102,4 @@ Items not covered that would be needed for production usage:
 - Improved routing such that `UriShortenerController` does not need `/shortened` in the mapping paths.
 - Full development and production configuration.
 - Configurable length for ShortenerKey generation
+- CI/CD
