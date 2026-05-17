@@ -1,8 +1,8 @@
 plugins {
-    kotlin("jvm") version "2.3.21"
-    kotlin("plugin.spring") version "2.3.21"
-    id("org.springframework.boot") version "4.0.6"
-    id("io.spring.dependency-management") version "1.1.7"
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.spring)
+    id("org.springframework.boot").version(libs.versions.springBootVersion)
+    id("io.spring.dependency-management").version(libs.versions.springDependencyManagementVersion)
 }
 
 group = "com.abstractcode"
@@ -20,29 +20,22 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation(libs.jackson.module.kotlin)
+    implementation(libs.kotlin.reflect)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.core.jvm)
+    implementation(libs.kotlinx.coroutines.reactor)
+    implementation(libs.spring.boot.starter.webmvc)
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
-    implementation("org.springframework.boot:spring-boot-h2console")
-    implementation("org.springframework.boot:spring-boot-starter-jdbc")
-    implementation("org.springframework.boot:spring-boot-starter-restclient")
-    implementation("org.springframework.boot:spring-boot-starter-webmvc")
+    developmentOnly(libs.spring.boot.devtools)
 
-    implementation("tools.jackson.module:jackson-module-kotlin")
+    testImplementation(libs.kotlin.test.junit5)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk)
+    testImplementation(libs.spring.boot.starter.webmvc.test)
+    testImplementation(libs.springmockk)
 
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
-
-    runtimeOnly("com.h2database:h2")
-
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.11.0")
-
-    testImplementation("org.springframework.boot:spring-boot-starter-jdbc-test")
-    testImplementation("org.springframework.boot:spring-boot-starter-restclient-test")
-    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
-
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 kotlin {

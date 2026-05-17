@@ -1,0 +1,34 @@
+[versions]
+jacksonModuleVersion = "3.1.3"
+junitVersion = "6.0.3"
+kotlinVersion = "2.3.21"
+kotlinxCoroutinesVersion = "1.11.0"
+mockkVersion = "1.14.9"
+springBootVersion = "4.0.6"
+springDependencyManagementVersion = "1.1.7"
+springmockkVersion = "5.0.1"
+
+[libraries]
+jackson-module-kotlin = { module = "tools.jackson.module:jackson-module-kotlin", version.ref = "jacksonModuleVersion" }
+
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junitVersion" }
+
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlinVersion" }
+kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5", version.ref = "kotlinVersion" }
+
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesVersion" }
+kotlinx-coroutines-core-jvm = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm", version.ref = "kotlinxCoroutinesVersion" }
+kotlinx-coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor", version.ref = "kotlinxCoroutinesVersion" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesVersion" }
+
+mockk = { module = "io.mockk:mockk-jvm", version.ref = "mockkVersion" }
+
+spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools", version.ref = "springBootVersion" }
+spring-boot-starter-webmvc = { module = "org.springframework.boot:spring-boot-starter-webmvc", version.ref = "springBootVersion" }
+spring-boot-starter-webmvc-test = { module = "org.springframework.boot:spring-boot-starter-webmvc-test", version.ref = "springBootVersion" }
+
+springmockk = { module = "com.ninja-squad:springmockk", version.ref = "springmockkVersion" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinVersion" }
+kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlinVersion" }
