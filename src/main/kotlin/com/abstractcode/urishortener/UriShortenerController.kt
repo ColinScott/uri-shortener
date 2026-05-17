@@ -2,6 +2,8 @@ package com.abstractcode.urishortener
 
 import com.abstractcode.urishortener.uristore.StoreResult
 import com.abstractcode.urishortener.uristore.UriStore
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -19,6 +21,8 @@ val VALID_SCHEMES: Array<String> = arrayOf("http", "https")
  */
 @RestController
 class UriShortenerController(val keyGenerator: ShortenerKeyGeneratorService, val uriStore: UriStore) {
+    val logger: Log = LogFactory.getLog(this::class.java)
+
     /**
      * Get the details of a shortened URI by [key][ShortenerKey]. This will initially contain only the full URI.
      *
@@ -29,8 +33,11 @@ class UriShortenerController(val keyGenerator: ShortenerKeyGeneratorService, val
         val uri = uriStore.getRedirectionUri(key)
 
         return if (uri != null) {
+            logger.info("Details requested for key '${key.key}'")
             ResponseEntity.ok(GetUriResponse(uri))
         } else {
+            // As key is unvalidated user input at this point do not log it
+            logger.warn("Details requested for unknown key")
             ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found")
         }
     }
@@ -38,14 +45,18 @@ class UriShortenerController(val keyGenerator: ShortenerKeyGeneratorService, val
     @PostMapping("/shortened")
     suspend fun add(@RequestBody addRequest: AddUriRequest): ResponseEntity<Any> {
         if (!addRequest.uri.isAbsolute || !VALID_SCHEMES.contains(addRequest.uri.scheme)) {
+            logger.warn("Attempt to shorten an invalid URI")
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body("URI is invalid")
         }
 
         val key = keyGenerator.generate()
 
         if (uriStore.addUri(key, addRequest.uri) == StoreResult.KeyAlreadyExists) {
+            logger.error("Unable to save URI as duplicate key generated.")
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Duplicate key detected")
         }
+
+        logger.info("Saved '${addRequest.uri}' to key '${key.key}'")
 
         val redirectUri = ServletUriComponentsBuilder
             .fromCurrentRequest()
