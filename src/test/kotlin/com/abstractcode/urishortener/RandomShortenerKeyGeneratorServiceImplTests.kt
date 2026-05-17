@@ -1,4 +1,4 @@
-package com.abstractcode.urlshortener
+package com.abstractcode.urishortener
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test

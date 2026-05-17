@@ -1,6 +1,6 @@
-package com.abstractcode.urlshortener.uristore
+package com.abstractcode.urishortener.uristore
 
-import com.abstractcode.urlshortener.ShortenerKey
+import com.abstractcode.urishortener.ShortenerKey
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.springframework.stereotype.Repository
@@ -22,13 +22,13 @@ class InMemoryUriStore : UriStore {
     val mutex = Mutex()
     val store = HashMap<ShortenerKey, URI>()
 
-    override suspend fun getRedirectionUrl(key: ShortenerKey): URI? {
+    override suspend fun getRedirectionUri(key: ShortenerKey): URI? {
         return mutex.withLock {
             store[key]
         }
     }
 
-    override suspend fun addUrl(
+    override suspend fun addUri(
         key: ShortenerKey, uri: URI
     ): StoreResult {
         return mutex.withLock {

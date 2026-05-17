@@ -1,6 +1,6 @@
-package com.abstractcode.urlshortener
+package com.abstractcode.urishortener
 
-import com.abstractcode.urlshortener.uristore.UriStore
+import com.abstractcode.urishortener.uristore.UriStore
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
  */
 @RestController
 @RequestMapping("/")
-class UrlShortenerController(val uriStore: UriStore) {
+class UriShortenerController(val uriStore: UriStore) {
     /**
      * Perform a redirect to a URI when given a [key][ShortenerKey].
      *
@@ -26,7 +26,7 @@ class UrlShortenerController(val uriStore: UriStore) {
      */
     @GetMapping("/{key}")
     suspend fun redirect(@PathVariable key: ShortenerKey): ResponseEntity<Any> {
-        val uri = uriStore.getRedirectionUrl(key)
+        val uri = uriStore.getRedirectionUri(key)
 
         if (uri != null) {
             val headers = HttpHeaders()

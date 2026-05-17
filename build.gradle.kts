@@ -7,7 +7,7 @@ plugins {
 
 group = "com.abstractcode"
 version = "0.0.1-SNAPSHOT"
-description = "url-shortener"
+description = "uri-shortener"
 
 java {
     toolchain {

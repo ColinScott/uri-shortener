@@ -1,9 +1,9 @@
-package com.abstractcode.urlshortener
+package com.abstractcode.urishortener
 
 import org.springframework.stereotype.Service
 
 /**
- * A key to a shortened URL.
+ * A key to a shortened URI.
  */
 @JvmInline
 value class ShortenerKey(val key: String)

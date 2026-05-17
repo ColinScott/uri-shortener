@@ -1,6 +1,6 @@
-package com.abstractcode.urlshortener.uristore
+package com.abstractcode.urishortener.uristore
 
-import com.abstractcode.urlshortener.RandomShortenerKeyGeneratorServiceImpl
+import com.abstractcode.urishortener.RandomShortenerKeyGeneratorServiceImpl
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Test
@@ -15,7 +15,7 @@ class InMemoryUriStoreTests {
 
         val keyGenerator = RandomShortenerKeyGeneratorServiceImpl()
 
-        assertNull(store.getRedirectionUrl(keyGenerator.generate()), "Empty Store should not return URI")
+        assertNull(store.getRedirectionUri(keyGenerator.generate()), "Empty Store should not return URI")
     }
 
     @Test
@@ -24,10 +24,10 @@ class InMemoryUriStoreTests {
 
         val keyGenerator = RandomShortenerKeyGeneratorServiceImpl()
 
-        store.addUrl(keyGenerator.generate(), URI("https://example.com/"))
+        store.addUri(keyGenerator.generate(), URI("https://example.com/"))
 
         assertNull(
-            store.getRedirectionUrl(keyGenerator.generate()),
+            store.getRedirectionUri(keyGenerator.generate()),
             "Single item Store should not return item for non-matching key"
         )
     }
@@ -39,11 +39,11 @@ class InMemoryUriStoreTests {
         val keyGenerator = RandomShortenerKeyGeneratorServiceImpl()
         val singleKey = keyGenerator.generate()
 
-        store.addUrl(singleKey, URI("https://example.com/"))
+        store.addUri(singleKey, URI("https://example.com/"))
 
         assertEquals(
             URI("https://example.com/"),
-            store.getRedirectionUrl(singleKey),
+            store.getRedirectionUri(singleKey),
             "Single item Store should return expected URI for matching key"
         )
     }
@@ -55,15 +55,15 @@ class InMemoryUriStoreTests {
         val keyGenerator = RandomShortenerKeyGeneratorServiceImpl()
         val expectedKey = keyGenerator.generate()
 
-        store.addUrl(expectedKey, URI("https://example.com/expected"))
+        store.addUri(expectedKey, URI("https://example.com/expected"))
 
         for (i in 1..5) {
-            store.addUrl(keyGenerator.generate(), URI("https://example.com/$i"))
+            store.addUri(keyGenerator.generate(), URI("https://example.com/$i"))
         }
 
         assertEquals(
             URI("https://example.com/expected"),
-            store.getRedirectionUrl(expectedKey),
+            store.getRedirectionUri(expectedKey),
             "Multiple item Store should return expected URI for matching key"
         )
     }
@@ -76,7 +76,7 @@ class InMemoryUriStoreTests {
 
         assertEquals(
             StoreResult.Success,
-            store.addUrl(keyGenerator.generate(), URI("https://example.com/")),
+            store.addUri(keyGenerator.generate(), URI("https://example.com/")),
             "Successful add should return Success result"
         )
     }
@@ -89,11 +89,11 @@ class InMemoryUriStoreTests {
 
         val duplicateKey = keyGenerator.generate()
 
-        store.addUrl(duplicateKey, URI("https://example.com/original"))
+        store.addUri(duplicateKey, URI("https://example.com/original"))
 
-        val secondAddResult = store.addUrl(duplicateKey, URI("https://example.com/update"))
+        val secondAddResult = store.addUri(duplicateKey, URI("https://example.com/update"))
 
-        val uriAfterSecondAdd = store.getRedirectionUrl(duplicateKey)
+        val uriAfterSecondAdd = store.getRedirectionUri(duplicateKey)
         assertAll({
             assertEquals(
                 StoreResult.KeyAlreadyExists, secondAddResult, "Duplicate add results in KeyAlreadyExists result"
