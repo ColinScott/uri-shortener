@@ -35,6 +35,7 @@ dependencies {
     testImplementation(libs.spring.boot.starter.webmvc.test)
     testImplementation(libs.springmockk)
 
+    testRuntimeOnly(libs.junit.jupiter.params)
     testRuntimeOnly(libs.junit.platform.launcher)
 }
 

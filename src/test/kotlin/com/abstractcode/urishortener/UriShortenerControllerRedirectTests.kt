@@ -7,10 +7,12 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.context.annotation.Import
 import org.springframework.test.web.servlet.client.RestTestClient
 import java.net.URI
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Import(RandomShortenerKeyGeneratorServiceImpl::class)
 @AutoConfigureRestTestClient
 class UriShortenerControllerRedirectTests(@Autowired private val client: RestTestClient) {
 

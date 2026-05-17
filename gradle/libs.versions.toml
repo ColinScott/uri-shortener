@@ -11,6 +11,7 @@ springmockkVersion = "5.0.1"
 [libraries]
 jackson-module-kotlin = { module = "tools.jackson.module:jackson-module-kotlin", version.ref = "jacksonModuleVersion" }
 
+junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junitVersion" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junitVersion" }
 
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlinVersion" }
