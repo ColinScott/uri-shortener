@@ -27,7 +27,7 @@ curl -X POST --location "http://localhost:8080/shortened" \
     -i
 ```
 
-Replace the server location and URI to be shortened as appropriate.
+Replace the server location and URI to be shortened as appropriate. URIs must use the `http` or `https` schemes.
 
 The shortened URL will be returned in the `Location` header, for example:
 
@@ -87,3 +87,18 @@ Date: Sun, 17 May 2026 22:11:03 GMT
 ```shell
 ./gradlew test
 ```
+
+## Extension Items
+
+Items not covered that would be needed for production usage:
+
+- Update and removal of shortened URIs
+- Security. This would be needed for update and removal, as well as potentially addition and query depending on use case.
+- Improvements to logging.
+  - Structured logging instead of default Spring Boot format.
+  - Validation of user supplied data to permit logging.
+  - More stringent validation of logged URIs.
+- Improved response bodies. Either as JSON objects giving additional information or as HTML for use in a browser. Both options could be supported using `Content-Type`.
+- Improved routing such that `UriShortenerController` does not need `/shortened` in the mapping paths.
+- Full development and production configuration.
+- Configurable length for ShortenerKey generation
