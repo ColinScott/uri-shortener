@@ -21,7 +21,7 @@ This configuration can be changed in [application.properties](./src/main/resourc
 URIs can be shortened via a POST, such as with the `curl` command below:
 
 ```shell
-curl -X POST --location "http://localhost:8080/" \
+curl -X POST --location "http://localhost:8080/shortened" \
     -H "Content-Type: application/json" \
     -d '{ "uri": "https://www.originenergy.com.au/electricity-gas/plans.html" }' \
     -i
@@ -61,6 +61,25 @@ Content-Length: 8
 Date: Sun, 17 May 2026 12:33:43 GMT
 
 Redirect%
+```
+
+### Getting details
+
+The shortened URI details can be obtained as JSON from the GET `/shortened/<key>` endpoint. Using `curl` for the key above this would be:
+
+```shell
+curl -i http://localhost:8080/shortened/DU7Igz46
+```
+
+Example response:
+
+```text
+HTTP/1.1 200
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Sun, 17 May 2026 22:11:03 GMT
+
+{"uri":"https://www.originenergy.com.au/electricity-gas/plans.html"}%
 ```
 
 ## Running Tests
