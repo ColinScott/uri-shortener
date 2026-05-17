@@ -1,0 +1,47 @@
+package com.abstractcode.urlshortener
+
+import com.abstractcode.urlshortener.uristore.UriStore
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.coEvery
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.web.servlet.client.RestTestClient
+import java.net.URI
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureRestTestClient
+class UrlShortenerControllerApplicationTests(@Autowired private val client: RestTestClient) {
+
+    @MockkBean
+    private lateinit var uriStore: UriStore
+
+    @Test
+    fun unknownKeyProduces404NotFound() {
+        val unknownKey = RandomShortenerKeyGeneratorServiceImpl().generate()
+
+        coEvery { uriStore.getRedirectionUrl(unknownKey) } returns null
+
+        client.get()
+            .uri("/${unknownKey.key}")
+            .exchange()
+            .expectStatus()
+            .isNotFound
+    }
+
+    @Test
+    fun unknownKeyProduces301MovedPermanently() {
+        val knownKey = RandomShortenerKeyGeneratorServiceImpl().generate()
+
+        coEvery { uriStore.getRedirectionUrl(knownKey) } returns URI("https://example.com/mocked")
+
+        client.get()
+            .uri("/${knownKey.key}")
+            .exchange()
+            .expectAll(
+                { r -> r.expectStatus().isTemporaryRedirect },
+                { r -> r.expectHeader().location("https://example.com/mocked") },
+            )
+    }
+}
