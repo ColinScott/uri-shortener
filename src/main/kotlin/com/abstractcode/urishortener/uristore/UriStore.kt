@@ -11,7 +11,7 @@ enum class StoreResult {
  * Store abstraction for persistence and retrieval of shortened URIs.
  */
 interface UriStore {
-    suspend fun getRedirectionUri(key: ShortenerKey): URI?
+    fun getRedirectionUri(key: ShortenerKey): URI?
 
-    suspend fun addUri(key: ShortenerKey, uri: URI): StoreResult
+    fun addUri(key: ShortenerKey, uri: URI): StoreResult
 }

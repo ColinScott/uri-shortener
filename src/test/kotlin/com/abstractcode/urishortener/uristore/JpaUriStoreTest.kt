@@ -4,14 +4,17 @@ import com.abstractcode.urishortener.RandomShortenerKeyGeneratorServiceImpl
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertNull
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest
+import org.springframework.context.annotation.Import
 import java.net.URI
 import kotlin.test.assertEquals
 
-class InMemoryUriStoreTests {
+@DataJpaTest
+@Import(JpaUriStore::class)
+class JpaUriStoreTest(@Autowired private var store: JpaUriStore) {
     @Test
     fun gettingUnknownKeyFromEmptyStoreReturnsNull() {
-        val store = InMemoryUriStore()
-
         val keyGenerator = RandomShortenerKeyGeneratorServiceImpl()
 
         assertNull(store.getRedirectionUri(keyGenerator.generate()), "Empty Store should not return URI")
@@ -19,8 +22,6 @@ class InMemoryUriStoreTests {
 
     @Test
     fun getNonMatchingKeyFromStoreReturnsNull() {
-        val store = InMemoryUriStore()
-
         val keyGenerator = RandomShortenerKeyGeneratorServiceImpl()
 
         store.addUri(keyGenerator.generate(), URI("https://example.com/"))
@@ -33,8 +34,6 @@ class InMemoryUriStoreTests {
 
     @Test
     fun getItemFromStoreWithSingleItemReturnsExpectedUri() {
-        val store = InMemoryUriStore()
-
         val keyGenerator = RandomShortenerKeyGeneratorServiceImpl()
         val singleKey = keyGenerator.generate()
 
@@ -49,8 +48,6 @@ class InMemoryUriStoreTests {
 
     @Test
     fun getItemFromStoreWithMultipleItemsReturnsExpectedUri() {
-        val store = InMemoryUriStore()
-
         val keyGenerator = RandomShortenerKeyGeneratorServiceImpl()
         val expectedKey = keyGenerator.generate()
 
@@ -69,8 +66,6 @@ class InMemoryUriStoreTests {
 
     @Test
     fun addOfUniqueKeyReturnsSuccess() {
-        val store = InMemoryUriStore()
-
         val keyGenerator = RandomShortenerKeyGeneratorServiceImpl()
 
         assertEquals(
@@ -82,8 +77,6 @@ class InMemoryUriStoreTests {
 
     @Test
     fun addOfDuplicateKeyDoesNotChangeStore() {
-        val store = InMemoryUriStore()
-
         val keyGenerator = RandomShortenerKeyGeneratorServiceImpl()
 
         val duplicateKey = keyGenerator.generate()
@@ -103,4 +96,5 @@ class InMemoryUriStoreTests {
             )
         })
     }
+
 }

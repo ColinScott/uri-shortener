@@ -1,4 +1,5 @@
 [versions]
+h2databaseVersion = "2.4.240"
 jacksonModuleVersion = "3.1.3"
 junitVersion = "6.0.3"
 kotlinVersion = "2.3.21"
@@ -9,6 +10,8 @@ springDependencyManagementVersion = "1.1.7"
 springmockkVersion = "5.0.1"
 
 [libraries]
+h2database = { module = "com.h2database:h2", version.ref = "h2databaseVersion" }
+
 jackson-module-kotlin = { module = "tools.jackson.module:jackson-module-kotlin", version.ref = "jacksonModuleVersion" }
 
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junitVersion" }
@@ -25,6 +28,8 @@ kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-t
 mockk = { module = "io.mockk:mockk-jvm", version.ref = "mockkVersion" }
 
 spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools", version.ref = "springBootVersion" }
+spring-boot-starter-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "springBootVersion" }
+spring-boot-starter-jpa-test = { module = "org.springframework.boot:spring-boot-starter-data-jpa-test", version.ref = "springBootVersion" }
 spring-boot-starter-webmvc = { module = "org.springframework.boot:spring-boot-starter-webmvc", version.ref = "springBootVersion" }
 spring-boot-starter-webmvc-test = { module = "org.springframework.boot:spring-boot-starter-webmvc-test", version.ref = "springBootVersion" }
 

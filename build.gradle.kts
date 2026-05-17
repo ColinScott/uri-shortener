@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.spring)
     id("org.springframework.boot").version(libs.versions.springBootVersion)
     id("io.spring.dependency-management").version(libs.versions.springDependencyManagementVersion)
+    kotlin("plugin.jpa").version(libs.versions.kotlinVersion)
 }
 
 group = "com.abstractcode"
@@ -25,18 +26,23 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.core.jvm)
     implementation(libs.kotlinx.coroutines.reactor)
+    implementation(libs.spring.boot.starter.jpa)
     implementation(libs.spring.boot.starter.webmvc)
 
     developmentOnly(libs.spring.boot.devtools)
 
+    runtimeOnly(libs.h2database)
+
     testImplementation(libs.kotlin.test.junit5)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk)
+    testImplementation(libs.spring.boot.starter.jpa.test)
     testImplementation(libs.spring.boot.starter.webmvc.test)
     testImplementation(libs.springmockk)
 
     testRuntimeOnly(libs.junit.jupiter.params)
     testRuntimeOnly(libs.junit.platform.launcher)
+    implementation(kotlin("stdlib"))
 }
 
 kotlin {
