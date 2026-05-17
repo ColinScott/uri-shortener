@@ -20,7 +20,8 @@ class UriShortenerControllerAddUriTests(@Autowired private val client: RestTestC
     @Test
     fun canStoreAWellFormattedUri() {
         val shortenedUri =
-            client.post().uri("/")
+            client.post()
+                .uri("/shortened")
                 .body(AddUriRequest(URI("https://example.com/add")))
                 .exchange()
                 .expectAll(
@@ -41,7 +42,8 @@ class UriShortenerControllerAddUriTests(@Autowired private val client: RestTestC
 
     @Test
     fun missingBodyProduces400BadRequest() {
-        client.post().uri("/")
+        client.post()
+            .uri("/shortened")
             .exchange()
             .expectAll(
                 { r -> r.expectStatus().isBadRequest }
@@ -54,7 +56,8 @@ class UriShortenerControllerAddUriTests(@Autowired private val client: RestTestC
         "{}", "{ bad json", "{ \"uri\": \"not a uri\" }"
     ])
     fun invalidBodiesProduce400BadRequest(body: String) {
-        client.post().uri("/")
+        client.post()
+            .uri("/shortened")
             .contentType(MediaType.APPLICATION_JSON)
             .body(body)
             .exchange()
@@ -74,7 +77,8 @@ class UriShortenerControllerAddUriTests(@Autowired private val client: RestTestC
         ]
     )
     fun invalidUrisProduce422UnprocessableEntity(body: String) {
-        client.post().uri("/")
+        client.post()
+            .uri("/shortened")
             .contentType(MediaType.APPLICATION_JSON)
             .body(body)
             .exchange()

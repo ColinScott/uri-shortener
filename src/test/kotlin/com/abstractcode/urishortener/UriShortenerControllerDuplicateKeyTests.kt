@@ -25,7 +25,8 @@ class UriShortenerControllerDuplicateKeyTests(@Autowired private val client: Res
 
         every { uriStore.addUri(any(), any()) } returns StoreResult.KeyAlreadyExists
 
-        client.post().uri("/")
+        client.post()
+            .uri("/shortened")
             .body(AddUriRequest(URI("https://example.com/duplicatekey")))
             .exchange()
             .expectAll(

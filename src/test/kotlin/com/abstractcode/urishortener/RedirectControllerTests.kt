@@ -2,19 +2,17 @@ package com.abstractcode.urishortener
 
 import com.abstractcode.urishortener.uristore.UriStore
 import com.ninjasquad.springmockk.MockkBean
-import io.mockk.coEvery
+import io.mockk.every
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.annotation.Import
 import org.springframework.test.web.servlet.client.RestTestClient
 import java.net.URI
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Import(RandomShortenerKeyGeneratorServiceImpl::class)
 @AutoConfigureRestTestClient
-class UriShortenerControllerRedirectTests(@Autowired private val client: RestTestClient) {
+class RedirectControllerTests(@Autowired private val client: RestTestClient) {
 
     @MockkBean
     private lateinit var uriStore: UriStore
@@ -23,16 +21,16 @@ class UriShortenerControllerRedirectTests(@Autowired private val client: RestTes
     fun unknownKeyProduces404NotFound() {
         val unknownKey = RandomShortenerKeyGeneratorServiceImpl().generate()
 
-        coEvery { uriStore.getRedirectionUri(unknownKey) } returns null
+        every { uriStore.getRedirectionUri(unknownKey) } returns null
 
         client.get().uri("/${unknownKey.key}").exchange().expectStatus().isNotFound
     }
 
     @Test
-    fun unknownKeyProduces301MovedPermanently() {
+    fun knownKeyProduces301MovedPermanently() {
         val knownKey = RandomShortenerKeyGeneratorServiceImpl().generate()
 
-        coEvery { uriStore.getRedirectionUri(knownKey) } returns URI("https://example.com/mocked")
+        every { uriStore.getRedirectionUri(knownKey) } returns URI("https://example.com/mocked")
 
         client.get().uri("/${knownKey.key}").exchange().expectAll(
             { r -> r.expectStatus().isTemporaryRedirect },

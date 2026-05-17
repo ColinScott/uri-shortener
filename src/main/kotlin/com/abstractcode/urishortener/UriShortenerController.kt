@@ -9,40 +9,33 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.net.URI
 
+data class GetUriResponse(val uri: URI)
 data class AddUriRequest(val uri: URI)
 
 val VALID_SCHEMES: Array<String> = arrayOf("http", "https")
 
 /**
  * Controller for retrieving and managing shortened URIs.
- *
- * Assumes it will be at the base path.
  */
 @RestController
-@RequestMapping("/")
 class UriShortenerController(val keyGenerator: ShortenerKeyGeneratorService, val uriStore: UriStore) {
     /**
-     * Perform a redirect to a URI when given a [key][ShortenerKey].
-     *
-     * Uses 307 TEMPORARY REDIRECT as the URI may change over time.
+     * Get the details of a shortened URI by [key][ShortenerKey]. This will initially contain only the full URI.
      *
      * Returns 404 NOT FOUND if the key is unknown.
      */
-    @GetMapping("/{key}")
-    suspend fun redirect(@PathVariable key: ShortenerKey): ResponseEntity<Any> {
+    @GetMapping("/shortened/{key}")
+    suspend fun get(@PathVariable key: ShortenerKey): ResponseEntity<Any> {
         val uri = uriStore.getRedirectionUri(key)
 
-        if (uri != null) {
-            val headers = HttpHeaders()
-            headers.location = uri
-
-            return ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).headers(headers).body("Redirect")
+        return if (uri != null) {
+            ResponseEntity.ok(GetUriResponse(uri))
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found")
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found")
         }
     }
 
-    @PostMapping("/")
+    @PostMapping("/shortened")
     suspend fun add(@RequestBody addRequest: AddUriRequest): ResponseEntity<Any> {
         if (!addRequest.uri.isAbsolute || !VALID_SCHEMES.contains(addRequest.uri.scheme)) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body("URI is invalid")
