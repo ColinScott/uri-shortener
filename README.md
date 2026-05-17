@@ -1,5 +1,7 @@
 # URI Shortener
 
+Spring Boot based micro-URI Shortener.
+
 ## Running
 
 From the project root directory run:
