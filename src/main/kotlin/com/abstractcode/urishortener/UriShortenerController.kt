@@ -1,5 +1,6 @@
 package com.abstractcode.urishortener
 
+import com.abstractcode.urishortener.uristore.StoreResult
 import com.abstractcode.urishortener.uristore.UriStore
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -49,7 +50,9 @@ class UriShortenerController(val keyGenerator: ShortenerKeyGeneratorService, val
 
         val key = keyGenerator.generate()
 
-        uriStore.addUri(key, addRequest.uri)
+        if (uriStore.addUri(key, addRequest.uri) == StoreResult.KeyAlreadyExists) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Duplicate key detected")
+        }
 
         val redirectUri = ServletUriComponentsBuilder
             .fromCurrentRequest()
