@@ -23,11 +23,7 @@ class UrlShortenerControllerApplicationTests(@Autowired private val client: Rest
 
         coEvery { uriStore.getRedirectionUrl(unknownKey) } returns null
 
-        client.get()
-            .uri("/${unknownKey.key}")
-            .exchange()
-            .expectStatus()
-            .isNotFound
+        client.get().uri("/${unknownKey.key}").exchange().expectStatus().isNotFound
     }
 
     @Test
@@ -36,12 +32,9 @@ class UrlShortenerControllerApplicationTests(@Autowired private val client: Rest
 
         coEvery { uriStore.getRedirectionUrl(knownKey) } returns URI("https://example.com/mocked")
 
-        client.get()
-            .uri("/${knownKey.key}")
-            .exchange()
-            .expectAll(
-                { r -> r.expectStatus().isTemporaryRedirect },
-                { r -> r.expectHeader().location("https://example.com/mocked") },
-            )
+        client.get().uri("/${knownKey.key}").exchange().expectAll(
+            { r -> r.expectStatus().isTemporaryRedirect },
+            { r -> r.expectHeader().location("https://example.com/mocked") },
+        )
     }
 }

@@ -21,8 +21,7 @@ class RandomShortenerKeyGeneratorServiceImplTests {
                 // Avoiding repeating the code under test using `isLetterOrDigit` would by itself permit many characters
                 // outside of the desired range.
                 assertTrue(
-                    key.key.toCharArray().all { c -> c in '0'..'z' },
-                    "All key characters must be in expected range"
+                    key.key.toCharArray().all { c -> c in '0'..'z' }, "All key characters must be in expected range"
                 )
             },
         )

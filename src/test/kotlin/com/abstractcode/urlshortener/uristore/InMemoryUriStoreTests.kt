@@ -94,21 +94,14 @@ class InMemoryUriStoreTests {
         val secondAddResult = store.addUrl(duplicateKey, URI("https://example.com/update"))
 
         val uriAfterSecondAdd = store.getRedirectionUrl(duplicateKey)
-        assertAll(
-            {
-                assertEquals(
-                    StoreResult.KeyAlreadyExists,
-                    secondAddResult,
-                    "Duplicate add results in KeyAlreadyExists result"
-                )
-            },
-            {
-                assertEquals(
-                    URI("https://example.com/original"),
-                    uriAfterSecondAdd,
-                    "Duplicate add does not change "
-                )
-            }
-        )
+        assertAll({
+            assertEquals(
+                StoreResult.KeyAlreadyExists, secondAddResult, "Duplicate add results in KeyAlreadyExists result"
+            )
+        }, {
+            assertEquals(
+                URI("https://example.com/original"), uriAfterSecondAdd, "Duplicate add does not change "
+            )
+        })
     }
 }
